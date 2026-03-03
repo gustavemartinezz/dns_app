@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  user_server:
+    build: ./US
+    ports:
+      - "8080:8080"
+    environment:
+      - FLASK_ENV=development
+    networks:
+      - dns_network
+
+  fibonacci_server:
+    build: ./FS
+    ports:
+      - "9090:9090"
+    environment:
+      - FLASK_ENV=development
+    networks:
+      - dns_network
+
+  authoritative_server:
+    build: ./AS
+    ports:
+      - "53533:53533/udp"
+    networks:
+      - dns_network
+    volumes:
+      - ./AS:/app
+
+networks:
+  dns_network:
+    driver: bridge
